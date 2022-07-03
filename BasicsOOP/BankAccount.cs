@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace BasicsOOP;
-
+/// <summary>
+/// Типы банковских счетов
+/// </summary>
 public enum BankAccountType
 {
     Payment,
@@ -15,7 +17,9 @@ public enum BankAccountType
     Special,
     Budget,
 }
-
+/// <summary>
+/// Класс банковского счёта
+/// </summary>
 public class BankAccount
 {
     static private int TotalBankNumber = 0;
@@ -38,13 +42,38 @@ public class BankAccount
         set { _TypeAccount = value; }
     }
 
-    public static int GenerateBankNumber()
+    private static int GenerateBankNumber()
     {
         return ++TotalBankNumber;
     }
+    /// <summary>
+    /// Вывод информации о банковском счёте
+    /// </summary>
     public void PrintInfo()
     {
         Console.WriteLine($"Баланс банковского счёта #{_BankNumber} типа {_TypeAccount}: {_Balance};");
+    }
+    /// <summary>
+    /// Снятие суммы с баланса банковского счёта
+    /// </summary>
+    /// <param name="amount">Сумма, которую необходимо снять</param>
+    /// <returns>Возвращает, удачно ли прошёл перевод</returns>
+    public bool BalanceWithdraw(decimal amount)
+    {
+        if (Balance >= amount)
+        {
+            Balance -= amount;
+            return true;
+        }
+        return false;
+    }
+    /// <summary>
+    /// Начисление суммы на баланс
+    /// </summary>
+    /// <param name="amount">Сумма, которую необходимо начислить</param>
+    public void BalancePut(decimal amount)
+    {
+        Balance += amount;
     }
 
     public BankAccount()
