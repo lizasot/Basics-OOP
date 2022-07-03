@@ -1,9 +1,11 @@
 ﻿using BasicsOOP;
 
-BankAccount test = new BankAccount();
+BankAccount test1 = new BankAccount();
+BankAccount test2 = new BankAccount(413);
+BankAccount test3 = new BankAccount(BankAccountType.Budget);
+BankAccount test4 = new BankAccount(612,BankAccountType.Deposit);
 
-test.SetBankNumber(BankAccount.GenerateBankNumber());
-test.SetBalance(100);
-test.SetTypeAccount(BankAccountType.Payment);
-
-Console.WriteLine($"Баланс банковского счёта #{test.GetBankNumber()} типа {test.GetTypeAccount()}: {test.GetBalance()};");
+test1.PrintInfo();
+test2.PrintInfo();
+test3.PrintInfo();
+test4.PrintInfo();

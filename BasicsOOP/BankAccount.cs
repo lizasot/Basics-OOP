@@ -23,26 +23,13 @@ public class BankAccount
     private decimal Balance;
     private BankAccountType TypeAccount;
 
-
-    public void SetBankNumber(int bankNumber)
-    {
-        BankNumber = bankNumber;
-    }
     public int GetBankNumber()
     {
         return BankNumber;
     }
-    public void SetBalance(decimal balance)
-    {
-        Balance = balance;
-    }
     public decimal GetBalance()
     {
         return Balance;
-    }
-    public void SetTypeAccount(BankAccountType typeAccount)
-    {
-        TypeAccount = typeAccount;
     }
     public BankAccountType GetTypeAccount()
     {
@@ -51,5 +38,34 @@ public class BankAccount
     public static int GenerateBankNumber()
     {
         return ++TotalBankNumber;
+    }
+    public void PrintInfo()
+    {
+        Console.WriteLine($"Баланс банковского счёта #{BankNumber} типа {TypeAccount}: {Balance};");
+    }
+
+    public BankAccount()
+    {
+        BankNumber = GenerateBankNumber();
+        Balance = 0;
+        TypeAccount = BankAccountType.Current;
+    }
+    public BankAccount(decimal balance)
+    {
+        BankNumber = GenerateBankNumber();
+        Balance = balance;
+        TypeAccount = BankAccountType.Current;
+    }
+    public BankAccount(BankAccountType typeAccount)
+    {
+        BankNumber = GenerateBankNumber();
+        Balance = 0;
+        TypeAccount = typeAccount;
+    }
+    public BankAccount(decimal balance, BankAccountType typeAccount)
+    {
+        BankNumber = GenerateBankNumber();
+        Balance = balance;
+        TypeAccount = typeAccount;
     }
 }
