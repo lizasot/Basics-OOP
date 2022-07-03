@@ -19,53 +19,56 @@ public enum BankAccountType
 public class BankAccount
 {
     static private int TotalBankNumber = 0;
-    private int BankNumber;
-    private decimal Balance;
-    private BankAccountType TypeAccount;
+    private int _BankNumber;
+    private decimal _Balance;
+    private BankAccountType _TypeAccount;
 
-    public int GetBankNumber()
+    public int BankNumber
     {
-        return BankNumber;
+        get { return _BankNumber; }
     }
-    public decimal GetBalance()
+    public decimal Balance
     {
-        return Balance;
+        get { return _Balance; }
+        set { _Balance = value; }
     }
-    public BankAccountType GetTypeAccount()
+    public BankAccountType TypeAccount
     {
-        return TypeAccount;
+        get { return _TypeAccount; }
+        set { _TypeAccount = value; }
     }
+
     public static int GenerateBankNumber()
     {
         return ++TotalBankNumber;
     }
     public void PrintInfo()
     {
-        Console.WriteLine($"Баланс банковского счёта #{BankNumber} типа {TypeAccount}: {Balance};");
+        Console.WriteLine($"Баланс банковского счёта #{_BankNumber} типа {_TypeAccount}: {_Balance};");
     }
 
     public BankAccount()
     {
-        BankNumber = GenerateBankNumber();
-        Balance = 0;
-        TypeAccount = BankAccountType.Current;
+        _BankNumber = GenerateBankNumber();
+        _Balance = 0;
+        _TypeAccount = BankAccountType.Current;
     }
     public BankAccount(decimal balance)
     {
-        BankNumber = GenerateBankNumber();
-        Balance = balance;
-        TypeAccount = BankAccountType.Current;
+        _BankNumber = GenerateBankNumber();
+        _Balance = balance;
+        _TypeAccount = BankAccountType.Current;
     }
     public BankAccount(BankAccountType typeAccount)
     {
-        BankNumber = GenerateBankNumber();
-        Balance = 0;
-        TypeAccount = typeAccount;
+        _BankNumber = GenerateBankNumber();
+        _Balance = 0;
+        _TypeAccount = typeAccount;
     }
     public BankAccount(decimal balance, BankAccountType typeAccount)
     {
-        BankNumber = GenerateBankNumber();
-        Balance = balance;
-        TypeAccount = typeAccount;
+        _BankNumber = GenerateBankNumber();
+        _Balance = balance;
+        _TypeAccount = typeAccount;
     }
 }

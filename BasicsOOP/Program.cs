@@ -6,6 +6,8 @@ BankAccount test3 = new BankAccount(BankAccountType.Budget);
 BankAccount test4 = new BankAccount(612,BankAccountType.Deposit);
 
 test1.PrintInfo();
+test1.Balance = 555;
+test1.PrintInfo();
 test2.PrintInfo();
 test3.PrintInfo();
 test4.PrintInfo();
