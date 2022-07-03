@@ -18,6 +18,7 @@ public enum BankAccountType
 
 public class BankAccount
 {
+    static private int TotalBankNumber = 0;
     private int BankNumber;
     private decimal Balance;
     private BankAccountType TypeAccount;
@@ -46,5 +47,9 @@ public class BankAccount
     public BankAccountType GetTypeAccount()
     {
         return TypeAccount;
+    }
+    public static int GenerateBankNumber()
+    {
+        return ++TotalBankNumber;
     }
 }

@@ -2,7 +2,7 @@
 
 BankAccount test = new BankAccount();
 
-test.SetBankNumber(1);
+test.SetBankNumber(BankAccount.GenerateBankNumber());
 test.SetBalance(100);
 test.SetTypeAccount(BankAccountType.Payment);
 
