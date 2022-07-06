@@ -75,6 +75,21 @@ public class BankAccount
     {
         Balance += amount;
     }
+    /// <summary>
+    /// Зачисление суммы с другого счёта
+    /// </summary>
+    /// <param name="source">Банковский счёт, откуда снимаются деньги для перевода</param>
+    /// <param name="amount">Сумма, которую необходимо перевести</param>
+    /// <returns>Возвращает, удачно ли прошёл перевод</returns>
+    public bool TransferMoney(BankAccount source, decimal amount)
+    {
+        if (source.BalanceWithdraw(amount))
+        {
+            BalancePut(amount);
+            return true;
+        }
+        return false;
+    }
 
     public BankAccount()
     {
