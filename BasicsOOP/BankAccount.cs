@@ -22,7 +22,7 @@ public enum BankAccountType
 /// </summary>
 public class BankAccount
 {
-    static private int TotalBankNumber = 0;
+    private static int TotalBankNumber = 0;
     private int _BankNumber;
     private decimal _Balance;
     private BankAccountType _TypeAccount;
