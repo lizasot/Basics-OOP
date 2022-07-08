@@ -18,12 +18,12 @@ namespace BasicsOOP
         /// <returns>Перевёрнутая строка</returns>
         public static string Reverse(string str)
         {
-            string result = "";
+            var result = new StringBuilder(str.Length);
             for (int i = str.Length - 1; i >= 0; i--)
             {
-                result += str[i];
+                result.Append(str[i]);
             }
-            return result;
+            return result.ToString();
         }
     }
 }
