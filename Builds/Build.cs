@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicsOOP.Builds;
+namespace Builds;
 public class Build
 {
-    private static int TotalBuild = 0;
     private int _ID;
     private int _Height;
     private int _Floors;
@@ -17,6 +16,13 @@ public class Build
     public int ID
     {
         get { return _ID; }
+        set
+        {
+            if (value > 0)
+            {
+                _ID = value;
+            }
+        }
     }
     public int Height
     {
@@ -62,10 +68,6 @@ public class Build
             }
         }
     }
-    private static int GenerateIDBuild()
-    {
-        return ++TotalBuild;
-    }
 
     public double FloorHeight()
     {
@@ -80,25 +82,22 @@ public class Build
         return _Apartments / (_Floors*_Entrances);
     }
 
-    public Build()
+    internal Build()
     {
-        _ID = GenerateIDBuild();
         _Height = 1;
         _Floors = 1;
         _Entrances = 1;
         _Apartments = 1;
     }
-    public Build(int value)
+    internal Build(int value)
     {
-        _ID = GenerateIDBuild();
         Height = value;
         Floors = value;
         Entrances = value;
         Apartments = value;
     }
-    public Build(int height, int floors, int apartments, int entrances)
+    internal Build(int height, int floors, int apartments, int entrances)
     {
-        _ID = GenerateIDBuild();
         Height = height;
         Floors = floors;
         Apartments = apartments;
