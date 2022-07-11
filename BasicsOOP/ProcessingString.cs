@@ -13,7 +13,7 @@ namespace BasicsOOP;
 /// <summary>
 /// Класс, работающий со строками
 /// </summary>
-public class ProcessingString
+public static class ProcessingString
 {
     /// <summary>
     /// Переворачивание строки

@@ -1,5 +1,9 @@
 ﻿using BasicsOOP;
+using BasicsOOP.Builds;
 
-Console.WriteLine("Введите путь файла:");
-string path = Console.ReadLine();
-ProcessingString.ReadFile(path);
+var b = new Build(188, 5, 160, 4);
+var b2 = new Build(188, 5, 160, 4);
+Console.WriteLine(b.ID);
+Console.WriteLine(b2.ID);
+Console.WriteLine(b.ApartmentsPerFloor());
+Console.WriteLine(b.FloorHeight());
