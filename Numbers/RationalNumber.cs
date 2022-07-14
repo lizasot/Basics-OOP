@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicsOOP;
+namespace Numbers;
+/// <summary>
+/// Класс дробных чисел
+/// </summary>
 public class RationalNumber
 {
     private int _Numerator;
@@ -33,6 +36,13 @@ public class RationalNumber
         }
     }
 
+    /// <summary>
+    /// Находит наибольшего общего делителя (НОД) двух чисел
+    /// </summary>
+    /// <param name="numb1">Первое произвольное целое число</param>
+    /// <param name="numb2">Второе произвольное целое число</param>
+    /// <returns>Возвращает наибольший общий делитель чисел</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Если найдено число равное нулю</exception>
     public static int NOD(int numb1, int numb2)
     {
         int tmp = 0;
@@ -69,6 +79,12 @@ public class RationalNumber
         } while (remainder != 0);
         return result;
     }
+    /// <summary>
+    /// Находит наименьшее общее кратное двух чисел
+    /// </summary>
+    /// <param name="numb1">Первое произвольное целое число</param>
+    /// <param name="numb2">Второе произвольное целое число</param>
+    /// <returns>Возвращает наименьшее общее кратное чисел</returns>
     public static int NOK(int numb1, int numb2)
     {
         return (numb1 * numb2) / NOD(numb1, numb2);

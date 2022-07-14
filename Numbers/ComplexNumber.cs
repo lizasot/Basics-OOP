@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicsOOP;
+namespace Numbers;
+/// <summary>
+/// Класс комплексных чисел
+/// </summary>
 public class ComplexNumber
 {
     private float _Real;
