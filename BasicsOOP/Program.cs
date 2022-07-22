@@ -1,22 +1,25 @@
 ﻿using BasicsOOP;
+using Figures;
 
-BankAccount bankAccount1 = new BankAccount();
-BankAccount bankAccount2 = new BankAccount();
-BankAccount bankAccount3 = bankAccount1;
+var p = new Point();
+Console.WriteLine(p);
+Console.WriteLine();
 
-Console.WriteLine(Equals(bankAccount1,bankAccount2));
-Console.WriteLine(Equals(bankAccount1, bankAccount3));
+p.Move(5, 4);
+Console.WriteLine(p);
+Console.WriteLine();
 
-Console.WriteLine(bankAccount1 == bankAccount2);
-Console.WriteLine(bankAccount1 == bankAccount3);
+var circle = new Circle();
+Console.WriteLine(circle);
+Console.WriteLine("Area: " + circle.CalcArea());
+Console.WriteLine();
 
-Console.WriteLine(!(bankAccount1 != bankAccount2));
-Console.WriteLine(!(bankAccount1 != bankAccount3));
+var rec = new Rectangle();
+Console.WriteLine(rec);
+Console.WriteLine("Area: " + rec.CalcArea());
+Console.WriteLine();
 
-Console.WriteLine("bankAccount1 " + bankAccount1.GetHashCode());
-Console.WriteLine("bankAccount2 " + bankAccount2.GetHashCode());
-Console.WriteLine("bankAccount3 " + bankAccount3.GetHashCode());
-
-Console.WriteLine(bankAccount1);
-Console.WriteLine(bankAccount2);
-Console.WriteLine(bankAccount3);
+rec.SetColor(ConsoleColor.Red);
+rec.ChangeVisibility();
+rec.Move(-5, 8);
+Console.WriteLine(rec);
