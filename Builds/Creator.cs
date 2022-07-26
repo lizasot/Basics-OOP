@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Builds;
-public class Creator
+public static class Creator
 {
     private static int _TotalBuild;
     private static Dictionary<int, Build> _BuildList;
-    public static int TotalBuild { get; }
-    public static Dictionary<int, Build> BuildList
+    public static int TotalBuild
     {
-        get { return _BuildList ?? (_BuildList = new Dictionary<int, Build>()); }
+        get { return _TotalBuild; }
     }
+    public static Dictionary<int, Build> BuildList => _BuildList ??= new();
     private static int GenerateIDBuild()
     {
         return ++_TotalBuild;
@@ -39,15 +39,8 @@ public class Creator
         BuildList.Add(build.ID, build);
         return build;
     }
-
     public static bool RemoveBuild(int id)
     {
         return BuildList.Remove(id);
-    }
-
-    private Creator()
-    {
-        _TotalBuild = 0;
-        _BuildList = new Dictionary<int, Build>();
     }
 }

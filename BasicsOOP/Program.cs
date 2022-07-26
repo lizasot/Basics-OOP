@@ -13,7 +13,7 @@ Console.WriteLine(b.ApartmentsPerFloor());
 Console.WriteLine(b.FloorHeight());
 
 Console.WriteLine();
-Console.WriteLine("Total builds: " + Creator.TotalBuild);
+Console.WriteLine($"Total builds: {Creator.TotalBuild}");
 Console.WriteLine("ID and Height of each building:");
 foreach (var build in Creator.BuildList)
 {
