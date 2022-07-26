@@ -12,31 +12,36 @@ using Coder;
 //А: 1040
 //Я: 1071
 
-int pos = 67;
-/*
+int pos = 0;
 do {
     Console.Write("Введите число, на которое необходимо сдвинуть буквы послания: ");
 } while (!int.TryParse(Console.ReadLine(), out pos));
-*/
-var codeA = new ACoder(pos);
-var codeB = new BCoder(pos - 2);
 
-
-//переделать задачу с BCoder
-
+string tmpStr;
 Console.WriteLine("Введите строку для зашифровки: ");
 string? str = Console.ReadLine();
-Console.Write("Зашифровка ACoder (сдвиг на 1 букву): ");
-string tmpStr = codeA.Encode(str);
-Console.WriteLine(tmpStr);
-Console.Write("Расшифровка ACoder: ");
-tmpStr = codeA.Decode(tmpStr);
-Console.WriteLine(tmpStr);
-Console.Write("Расшифровка ACoder ещё раз: ");
-tmpStr = codeA.Decode(tmpStr);
-Console.WriteLine(tmpStr);
+try
+{
+    var codeA = new ACoder(pos);
+
+    Console.Write("Зашифровка ACoder (сдвиг на 1 букву): ");
+    tmpStr = codeA.Encode(str);
+    Console.WriteLine(tmpStr);
+    Console.Write("Расшифровка ACoder: ");
+    tmpStr = codeA.Decode(tmpStr);
+    Console.WriteLine(tmpStr);
+    Console.Write("Расшифровка ACoder ещё раз: ");
+    tmpStr = codeA.Decode(tmpStr);
+    Console.WriteLine(tmpStr);
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+}
 
 Console.WriteLine();
+
+var codeB = new BCoder();
 
 Console.Write($"Работа BCoder (сдвиг на {pos} букв(ы)): ");
 tmpStr = codeB.Encode(str);
