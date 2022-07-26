@@ -12,13 +12,14 @@ using Coder;
 //А: 1040
 //Я: 1071
 
-
-var codeA = new ACoder();
-int pos = 0;
+int pos = 67;
+/*
 do {
     Console.Write("Введите число, на которое необходимо сдвинуть буквы послания: ");
 } while (!int.TryParse(Console.ReadLine(), out pos));
-var codeB = new BCoder(pos);
+*/
+var codeA = new ACoder(pos);
+var codeB = new BCoder(pos - 2);
 
 
 //переделать задачу с BCoder

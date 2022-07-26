@@ -1,20 +1,113 @@
 ﻿using System.Text;
 
 namespace Coder;
+/// <summary>
+/// Русский алфавит в верхнем регистре. Значения в диапазоне от 1 до 33
+/// </summary>
+public enum UpperAlphabet
+{
+    А = 1,
+    Б,
+    В,
+    Г,
+    Д,
+    Е,
+    Ё,
+    Ж,
+    З,
+    И,
+    Й,
+    К,
+    Л,
+    М,
+    Н,
+    О,
+    П,
+    Р,
+    С,
+    Т,
+    У,
+    Ф,
+    Х,
+    Ц,
+    Ч,
+    Ш,
+    Щ,
+    Ъ,
+    Ы,
+    Ь,
+    Э,
+    Ю,
+    Я //33
+}
 
-//англ:
-//a: 97
-//z: 122
-//A: 65
-//Z: 90
+/// <summary>
+/// Русский алфавит в нижнем регистре. Значения в диапазоне от 1 до 33
+/// </summary>
+public enum LowAlphabet
+{
+    а = 1,
+    б,
+    в,
+    г,
+    д,
+    е,
+    ё,
+    ж,
+    з,
+    и,
+    й,
+    к,
+    л,
+    м,
+    н,
+    о,
+    п,
+    р,
+    с,
+    т,
+    у,
+    ф,
+    х,
+    ц,
+    ч,
+    ш,
+    щ,
+    ъ,
+    ы,
+    ь,
+    э,
+    ю,
+    я //33
+}
 
-//ру:
-//а: 1072
-//я: 1103
-//А: 1040
-//Я: 1071
+/// <summary>
+/// Класс, поддерживающий шифрование и дешифрование в виде сдвига буквы на Pos позиций по русскому алфавиту.
+/// </summary>
 public class ACoder : ICoder
 {
+    private int _Pos = 1;
+    public int Pos
+    {
+        get { return _Pos; }
+        set
+        {
+            if (value > 0)
+            {
+                _Pos = value;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("value");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Шифрование строки
+    /// </summary>
+    /// <param name="str">Строка, которую необходимо зашифровать</param>
+    /// <returns>Возвращает строку в зашифрованном виде</returns>
     public string Encode(string? str)
     {
         if (str == null)
@@ -24,59 +117,30 @@ public class ACoder : ICoder
         var newStr = new StringBuilder(str.Length);
         for (int i = 0; i < str.Length; i++)
         {
-            int charCode = (int)str[i];
-            if (charCode >= 1072 && charCode <= 1103)
+            if (Enum.IsDefined(typeof(UpperAlphabet), str[i].ToString())) //А-Я
             {
-                if (charCode == 1103)
-                {
-                    newStr.Append('а');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] + 1));
-                }
+                int offset = Pos + (int)Enum.Parse(typeof(UpperAlphabet), str[i].ToString());
+                offset -= (offset / 33) * 33;
+                newStr.Append(Enum.GetName(typeof(UpperAlphabet), offset));
+                continue;
             }
-            else if (charCode >= 1040 && charCode <= 1071)
+            else if (Enum.IsDefined(typeof(LowAlphabet), str[i].ToString())) //а-я
             {
-                if (charCode == 1071)
-                {
-                    newStr.Append('А');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] + 1));
-                }
+                int offset = Pos + (int)Enum.Parse(typeof(LowAlphabet), str[i].ToString());
+                offset -= (offset / 33) * 33;
+                newStr.Append(Enum.GetName(typeof(LowAlphabet), offset));
+                continue;
             }
-            else if (charCode >= 97 && charCode <= 122)
-            {
-                if (charCode == 122)
-                {
-                    newStr.Append('a');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] + 1));
-                }
-            }
-            else if (charCode >= 65 && charCode <= 90)
-            {
-                if (charCode == 90)
-                {
-                    newStr.Append('A');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] + 1));
-                }
-            }
-            else
-            {
-                newStr.Append(str[i]);
-            }
+            newStr.Append(str[i]);
         }
         return newStr.ToString();
     }
 
+    /// <summary>
+    /// Расшифрование единожды зашифрованной строки
+    /// </summary>
+    /// <param name="str">Строка, которую необходимо расшифровать</param>
+    /// <returns>Возвращает строку в расшифрованном виде</returns>
     public string Decode(string? str)
     {
         if (str == null)
@@ -86,56 +150,31 @@ public class ACoder : ICoder
         var newStr = new StringBuilder(str.Length);
         for (int i = 0; i < str.Length; i++)
         {
-            int charCode = (int)str[i];
-            if (charCode >= 1072 && charCode <= 1103)
+            if (Enum.IsDefined(typeof(UpperAlphabet), str[i].ToString())) //А-Я
             {
-                if (charCode == 1072)
-                {
-                    newStr.Append('я');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] - 1));
-                }
+                int offset = (int)Enum.Parse(typeof(UpperAlphabet), str[i].ToString()) - Pos;
+                offset += ((33 - offset) / 33) * 33;
+                newStr.Append(Enum.GetName(typeof(UpperAlphabet), offset));
+                continue;
             }
-            else if (charCode >= 1040 && charCode <= 1071)
+            else if (Enum.IsDefined(typeof(LowAlphabet), str[i].ToString())) //а-я
             {
-                if (charCode == 1040)
-                {
-                    newStr.Append('Я');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] - 1));
-                }
+                int offset = (int)Enum.Parse(typeof(LowAlphabet), str[i].ToString()) - Pos;
+                offset += ((33 - offset) / 33) * 33;
+                newStr.Append(Enum.GetName(typeof(LowAlphabet), offset));
+                continue;
             }
-            else if (charCode >= 97 && charCode <= 122)
-            {
-                if (charCode == 97)
-                {
-                    newStr.Append('z');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] - 1));
-                }
-            }
-            else if (charCode >= 65 && charCode <= 90)
-            {
-                if (charCode == 65)
-                {
-                    newStr.Append('Z');
-                }
-                else
-                {
-                    newStr.Append((char)(str[i] - 1));
-                }
-            }
-            else
-            {
-                newStr.Append(str[i]);
-            }
+            newStr.Append(str[i]);
         }
         return newStr.ToString();
+    }
+
+    public ACoder()
+    {
+        Pos = 1;
+    }
+    public ACoder(int pos)
+    {
+        Pos = pos;
     }
 }
