@@ -22,12 +22,14 @@ public static class ProcessingString
     /// <returns>Перевёрнутая строка</returns>
     public static string Reverse(string str)
     {
-        var result = new StringBuilder(str.Length);
+        char[] result = str.ToCharArray();
+        int j = 0;
         for (int i = str.Length - 1; i >= 0; i--)
         {
-            result.Append(str[i]);
+            result[j] = str[i];
+            j++;
         }
-        return result.ToString();
+        return new string(result);
     }
     /// <summary>
     /// Возвращает первый Email в строке 
@@ -81,9 +83,9 @@ public static class ProcessingString
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
             str = "";
             return "";
+            throw;
         }
         var result = str.Substring(indexStart, index);
         str = "";
@@ -95,41 +97,34 @@ public static class ProcessingString
     /// <param name="file">Полный путь файла</param>
     public static void ReadFile(string file)
     {
-        try
+        using (StreamReader fs = File.OpenText(@file))
         {
-            using (StreamReader fs = File.OpenText(@file))
+            using (StreamWriter fw = new StreamWriter("test.txt", false))
             {
-                using (StreamWriter fw = new StreamWriter("test.txt", false))
+                string str = "";
+                string email = "";
+                while (fs.Peek() != -1)
                 {
-                    string str = "";
-                    string email = "";
-                    while (fs.Peek() != -1)
+                    char c = (char)fs.Read();
+                    if (c != '&')
                     {
-                        char c = (char)fs.Read();
-                        if (c != '&')
-                        {
-                            str = str + c;
-                        }
-                        else
-                        {
-                            email = SearchMail(ref str);
-                            if (email != "")
-                            {
-                                fw.WriteLine(email);
-                            }
-                        }
+                        str = str + c;
                     }
-                    email = SearchMail(ref str);
-                    if (email != "")
+                    else
                     {
-                        fw.WriteLine(email);
+                        email = SearchMail(ref str);
+                        if (email != "")
+                        {
+                            fw.WriteLine(email);
+                        }
                     }
                 }
+                email = SearchMail(ref str);
+                if (email != "")
+                {
+                    fw.WriteLine(email);
+                }
             }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
         }
     }
 }

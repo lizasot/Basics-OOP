@@ -1,4 +1,4 @@
-﻿using BasicsOOP;
+using BasicsOOP;
 using Builds;
 
 var b = Creator.CreateBuild(188, 5, 160, 4);
