@@ -3,59 +3,41 @@ using Numbers;
 
 static void TestComplexNumber()
 {
-    var numb1 = new ComplexNumber(4, 2);
-    var numb2 = new ComplexNumber(-5, 3);
+    ComplexNumber numb1;
+    ComplexNumber numb2;
 
     Console.WriteLine("\nТест команды +");
-    numb1.Real = 4; numb1.Imaginary = 2;
-    numb2.Real = -5; numb2.Imaginary = 3;
+    numb1 = new ComplexNumber(4, 2);
+    numb2 = new ComplexNumber(-5, 3);
     Console.WriteLine(numb1 + " + " + numb2 + " = " + (numb1+ numb2));
     Console.Write("Совпадает ли с ожидаемым результатом: ");
     Console.WriteLine(numb1 + numb2 == new ComplexNumber(-1, 5));
 
     Console.WriteLine("\nТест команды *");
-    numb1.Real = 2; numb1.Imaginary = 3;
-    numb2.Real = 5; numb2.Imaginary = 4;
+    numb1 = new ComplexNumber(2, 3);
+    numb2 = new ComplexNumber(5, 4);
     Console.WriteLine(numb1 + " * " + numb2 + " = " + (numb1 * numb2));
     Console.Write("Совпадает ли с ожидаемым результатом: ");
     Console.WriteLine(numb1 * numb2 == new ComplexNumber(-2, 23));
 
     Console.WriteLine("\nТест команды -");
-    numb1.Real = 5; numb1.Imaginary = 4;
-    numb2.Real = -2; numb2.Imaginary = 3;
+    numb1 = new ComplexNumber(5, 4);
+    numb2 = new ComplexNumber(-2, 3);
     Console.WriteLine(numb1 + " - " + numb2 + " = " + (numb1 - numb2));
     Console.Write("Совпадает ли с ожидаемым результатом: ");
     Console.WriteLine(numb1 - numb2 == new ComplexNumber(7, 1));
 
     Console.WriteLine("\nТест команды ==");
-    numb1.Real = 5; numb1.Imaginary = 4;
-    numb2.Real = -2; numb2.Imaginary = 3;
     Console.WriteLine(numb1 + " == " + numb2 + " = " + (numb1 == numb2));
     Console.Write("Совпадает ли с ожидаемым результатом: ");
     Console.WriteLine((numb1 == numb2) == false);
 
-    numb1.Real = -2; numb1.Imaginary = 3;
-    numb2.Real = -2; numb2.Imaginary = 3;
+    numb1 = new ComplexNumber(-2, 3);
     Console.WriteLine(numb1 + " == " + numb2 + " = " + (numb1 == numb2));
     Console.Write("Совпадает ли с ожидаемым результатом: ");
     Console.WriteLine((numb1 == numb2) == true);
 }
 
-static void SetDefault(ref RationalNumber numb23, ref RationalNumber numb58_1, ref RationalNumber numb58_2, ref RationalNumber numb21_18)
-{
-    numb23.Numerator = 2;
-    numb23.Denominator = 3;
-
-    numb58_1.Numerator = 5;
-    numb58_1.Denominator = 8;
-
-    numb58_2.Numerator = 5;
-    numb58_2.Denominator = 8;
-
-    numb21_18.Numerator = 21;
-    numb21_18.Denominator = 18;
-}
-//SetDefault(ref numb23, ref numb58_1, ref numb58_2, ref numb21_18);
 static void TestRationalNumber()
 {
     var numb23 = new RationalNumber(2, 3); //0,66(..67)
@@ -71,7 +53,6 @@ static void TestRationalNumber()
 
     try
     {
-
         //==
         Console.WriteLine("\nТест команды ==");
         Console.WriteLine((numb58_1 == numb23) == false);
@@ -114,67 +95,52 @@ static void TestRationalNumber()
 
         //+
         Console.WriteLine("\nТест команды +");
-        tmp.Numerator = 31;
-        tmp.Denominator = 24;
+        tmp = new RationalNumber(31, 24);
         Console.WriteLine((numb58_1 + numb23) == tmp); // 31/24
 
-        tmp.Numerator = 10;
-        tmp.Denominator = 8;
+        tmp = new RationalNumber(10, 8);
         Console.WriteLine((numb58_1 + numb58_2) == tmp); // 10/8
 
-        tmp.Numerator = 33;
-        tmp.Denominator = 18;
+        tmp = new RationalNumber(33, 18);
         Console.WriteLine((numb23 + numb21_18) == tmp); // 33/18
 
         //-
         Console.WriteLine("\nТест команды -");
-        tmp.Numerator = -1;
-        tmp.Denominator = 24;
+        tmp = new RationalNumber(-1, 24);
         Console.WriteLine((numb58_1 - numb23) == tmp); // -1/24
 
-        tmp.Numerator = 0;
-        tmp.Denominator = 8;
+        tmp = new RationalNumber(0, 8);
         Console.WriteLine((numb58_1 - numb58_2) == tmp); // 0/8
 
-        tmp.Numerator = -9;
-        tmp.Denominator = 18;
+        tmp = new RationalNumber(-9, 18);
         Console.WriteLine((numb23 - numb21_18) == tmp); // -9/18
 
         //++
         Console.WriteLine("\nТест команды ++");
-        tmp.Numerator = numb23.Numerator + numb23.Denominator;
-        tmp.Denominator = numb23.Denominator;
-        numb23++;
-        Console.WriteLine(numb23 == tmp);
+        tmp = new RationalNumber(numb23.Numerator + numb23.Denominator, numb23.Denominator);
+        Console.WriteLine(numb23);
+        Console.WriteLine(tmp);
+        Console.WriteLine(++numb23 == tmp);
+        Console.WriteLine(numb23);
+        Console.WriteLine(tmp);
 
-        tmp.Numerator = numb58_1.Numerator + numb58_1.Denominator;
-        tmp.Denominator = numb58_1.Denominator;
-        numb58_1++;
-        Console.WriteLine(numb58_1 == tmp);
+        tmp = new RationalNumber(numb58_1.Numerator + numb58_1.Denominator, numb58_1.Denominator);
+        Console.WriteLine(++numb58_1 == tmp);
 
-        tmp.Numerator = numb21_18.Numerator + numb21_18.Denominator;
-        tmp.Denominator = numb21_18.Denominator;
-        numb21_18++;
-        Console.WriteLine(numb21_18 == tmp);
+        tmp = new RationalNumber(numb21_18.Numerator + numb21_18.Denominator, numb21_18.Denominator);
+        Console.WriteLine(++numb21_18 == tmp);
 
         //--
         Console.WriteLine("\nТест команды --");
-        tmp.Numerator = numb23.Numerator - numb23.Denominator;
-        tmp.Denominator = numb23.Denominator;
-        numb23--;
-        Console.WriteLine(numb23 == tmp);
+        tmp = new RationalNumber(numb23.Numerator - numb23.Denominator, numb23.Denominator);
+        Console.WriteLine(--numb23 == tmp);
 
-        tmp.Numerator = numb58_1.Numerator - numb58_1.Denominator;
-        tmp.Denominator = numb58_1.Denominator;
-        numb58_1--;
-        Console.WriteLine(numb58_1 == tmp);
+        tmp = new RationalNumber(numb58_1.Numerator - numb58_1.Denominator, numb58_1.Denominator);
+        Console.WriteLine(--numb58_1 == tmp);
 
-        tmp.Numerator = numb21_18.Numerator - numb21_18.Denominator;
-        tmp.Denominator = numb21_18.Denominator;
-        numb21_18--;
-        Console.WriteLine(numb21_18 == tmp);
 
-        //SetDefault(ref numb23, ref numb58_1, ref numb58_2, ref numb21_18);
+        tmp = new RationalNumber(numb21_18.Numerator - numb21_18.Denominator, numb21_18.Denominator);
+        Console.WriteLine(--numb21_18 == tmp);
 
         //ToString()
         Console.WriteLine("\nТест команды ToString()");
@@ -223,3 +189,5 @@ static void TestRationalNumber()
 }
 
 TestComplexNumber();
+Console.WriteLine("TestRationalNumber:");
+TestRationalNumber();
