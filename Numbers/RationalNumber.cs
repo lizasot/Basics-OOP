@@ -8,33 +8,13 @@ namespace Numbers;
 /// <summary>
 /// Класс дробных чисел
 /// </summary>
-public class RationalNumber
+public readonly struct RationalNumber
 {
-    private int _Numerator;
-    private int _Denominator;
+    private readonly int _Numerator;
+    private readonly int _Denominator;
 
-    public int Numerator
-    {
-        get { return _Numerator; }
-        set { _Numerator = value; }
-    }
-    public int Denominator
-    {
-        get { return _Denominator; }
-        set
-        {
-            if (value == 0)
-            {
-                throw new ArgumentOutOfRangeException("value");
-            }
-            if (value < 0)
-            {
-                _Numerator *= -1;
-                _Denominator = value * (-1);
-            }
-            _Denominator = value;
-        }
-    }
+    public int Numerator { get { return _Numerator; } }
+    public int Denominator { get { return _Denominator; } }
 
     /// <summary>
     /// Находит наибольшего общего делителя (НОД) двух чисел
@@ -90,10 +70,18 @@ public class RationalNumber
         return (numb1 * numb2) / NOD(numb1, numb2);
     }
 
-    public static bool operator ==(RationalNumber numb1, RationalNumber numb2)
+    public override bool Equals(object? obj)
     {
-        return ((numb1._Numerator == numb2._Numerator) && (numb1._Denominator == numb2._Denominator));
+        if (obj is not RationalNumber)
+        {
+            return false;
+        }
+
+        RationalNumber other = (RationalNumber)obj;
+        return Numerator == other.Numerator
+            && Denominator == other.Denominator;
     }
+    public static bool operator ==(RationalNumber numb1, RationalNumber numb2) => Equals(numb1, numb2);
     public static bool operator !=(RationalNumber numb1, RationalNumber numb2) => !(numb1 == numb2);
     public static bool operator >(RationalNumber numb1, RationalNumber numb2)
     {
@@ -161,13 +149,11 @@ public class RationalNumber
     }
     public static RationalNumber operator ++(RationalNumber numb)
     {
-        numb._Numerator += numb._Denominator;
-        return numb;
+        return new RationalNumber(numb.Numerator + numb.Denominator, numb.Denominator);
     }
     public static RationalNumber operator --(RationalNumber numb)
     {
-        numb._Numerator -= numb._Denominator;
-        return numb;
+        return new RationalNumber(numb.Numerator - numb.Denominator, numb.Denominator);
     }
     public static RationalNumber operator *(RationalNumber numb1, RationalNumber numb2)
     {
@@ -179,14 +165,14 @@ public class RationalNumber
     }
     public static RationalNumber operator %(RationalNumber numb1, RationalNumber numb2)
     {
-        var numb = (numb1 / numb2);
-        numb.Numerator -= (numb.Numerator / numb.Denominator)* numb.Denominator;
-        return numb;
+        int num = numb1._Numerator * numb2._Denominator;
+        int denom = numb1._Denominator * numb2._Numerator;
+        num -= (num / denom) * denom;
+        return new RationalNumber(num, denom);
     }
-
     public override string ToString()
     {
-        return _Numerator.ToString() + "/" + _Denominator.ToString();
+        return $"{_Numerator} / {_Denominator}";
     }
     public static explicit operator float(RationalNumber numb)
     {
@@ -197,14 +183,21 @@ public class RationalNumber
         return numb._Numerator / numb._Denominator;
     }
 
-    public RationalNumber()
-    {
-        Numerator = 1;
-        Denominator = 1;
-    }
     public RationalNumber(int numerator, int denominator)
     {
-        Numerator = numerator;
-        Denominator = denominator;
+        _Numerator = numerator;
+        if (denominator == 0)
+        {
+            throw new ArgumentOutOfRangeException("value");
+        }
+        if (denominator < 0)
+        {
+            _Numerator = -_Numerator;
+            _Denominator = -denominator;
+        }
+        else
+        {
+            _Denominator = denominator;
+        }
     }
 }

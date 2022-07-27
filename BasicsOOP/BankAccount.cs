@@ -89,15 +89,14 @@ public class BankAccount
     }
     public override bool Equals(object? obj)
     {
-        if (obj is null)
-            return false;
-        if (obj.GetType() != typeof(BankAccount))
+        if (obj is not BankAccount other)
             return false;
 
-        var other = (BankAccount)obj;
-        return BankNumber == other.BankNumber && Balance == other.Balance && TypeAccount == other.TypeAccount;
+        return BankNumber == other.BankNumber 
+            && Balance == other.Balance 
+            && TypeAccount == other.TypeAccount;
     }
-    public static bool operator ==(BankAccount account1, BankAccount account2) => account1.Equals(account2);
+    public static bool operator ==(BankAccount account1, BankAccount account2) => Equals(account1, account2);
     public static bool operator !=(BankAccount account1, BankAccount account2) => !(account1 == account2);
     public override string ToString()
     {

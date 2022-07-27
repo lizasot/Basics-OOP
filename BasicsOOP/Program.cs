@@ -1,4 +1,4 @@
-﻿using BasicsOOP;
+using BasicsOOP;
 using Coder;
 //англ:
 //a: 97

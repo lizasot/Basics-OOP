@@ -71,7 +71,7 @@ public class Build
 
     public double FloorHeight()
     {
-        return (double)_Height / (double)_Floors;
+        return (double)_Height / _Floors;
     }
     public int ApartmentsInEntrance()
     {

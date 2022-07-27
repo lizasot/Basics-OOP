@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,26 +9,26 @@ namespace Numbers;
 /// <summary>
 /// Класс комплексных чисел
 /// </summary>
-public class ComplexNumber
+public readonly struct ComplexNumber
 {
-    private float _Real;
-    private float _Imaginary;
+    private readonly float _Real = 0;
+    private readonly float _Imaginary = 0;
 
-    public float Real
-    {
-        get { return _Real; }
-        set { _Real = value; }
-    }
-    public float Imaginary
-    {
-        get { return _Imaginary; }
-        set { _Imaginary = value; }
-    }
+    public float Real { get { return _Real; } }
+    public float Imaginary { get { return _Imaginary; } }
 
-    public static bool operator ==(ComplexNumber numb1, ComplexNumber numb2)
+    public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        return numb1._Real == numb2._Real && numb1._Imaginary == numb2._Imaginary;
+        if (obj is not ComplexNumber)
+        {
+            return false;
+        }
+
+        ComplexNumber other = (ComplexNumber)obj;
+        return Real == other.Real
+            && Imaginary == other.Imaginary;
     }
+    public static bool operator ==(ComplexNumber numb1, ComplexNumber numb2) => Equals(numb1, numb2);
     public static bool operator !=(ComplexNumber numb1, ComplexNumber numb2) => !(numb1 == numb2);
     public static ComplexNumber operator +(ComplexNumber numb1, ComplexNumber numb2)
     {
@@ -43,35 +44,31 @@ public class ComplexNumber
     }
     public override string ToString()
     {
-        string str = "";
+        var str = new StringBuilder();
         if (_Real != 0)
         {
-            str = _Real.ToString();
+            str.Append(_Real);
         }
         if (_Imaginary != 0)
         {
             if (_Imaginary > 0)
             {
-                str += " + ";
+                str.Append(" + ");
+                str.Append(_Imaginary != 1 ? _Imaginary : "");
             }
             else
             {
-                str += " - ";
-                _Imaginary *= -1;
+                str.Append(" - ");
+                str.Append(_Imaginary != -1 ? -_Imaginary : "");
             }
-            str += _Imaginary != 1 ? _Imaginary.ToString() : "" + "i";
+            str.Append("i");
         }
-        return str;
+        return str.ToString();
     }
 
-    public ComplexNumber()
-    {
-        Real = 0;
-        Imaginary = 0;
-    }
     public ComplexNumber(float real, float imaginary)
     {
-        Real = real;
-        Imaginary = imaginary;
+        _Real = real;
+        _Imaginary = imaginary;
     }
 }
