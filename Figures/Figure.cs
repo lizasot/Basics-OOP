@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace Figures;
-public class Figure
+public class Figure : IMove2D, IColorChange
 {
     private ConsoleColor _Color = ConsoleColor.White;
     private bool _Visible = true;
