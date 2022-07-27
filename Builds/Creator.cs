@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ public static class Creator
     {
         get { return _TotalBuild; }
     }
-    public static Dictionary<int, Build> BuildList => _BuildList ??= new();
+    public static IReadOnlyDictionary<int, Build> BuildList => _BuildList ??= new Dictionary<int, Build>();
     private static int GenerateIDBuild()
     {
         return ++_TotalBuild;
@@ -22,25 +22,25 @@ public static class Creator
     {
         var build = new Build();
         build.ID = GenerateIDBuild();
-        BuildList.Add(build.ID, build);
+        _BuildList.Add(build.ID, build);
         return build;
     }
     public static Build CreateBuild(int value)
     {
         var build = new Build(value);
         build.ID = GenerateIDBuild();
-        BuildList.Add(build.ID, build);
+        _BuildList.Add(build.ID, build);
         return build;
     }
     public static Build CreateBuild(int height, int floors, int apartments, int entrances)
     {
         var build = new Build(height, floors, apartments, entrances);
         build.ID = GenerateIDBuild();
-        BuildList.Add(build.ID, build);
+        _BuildList.Add(build.ID, build);
         return build;
     }
     public static bool RemoveBuild(int id)
     {
-        return BuildList.Remove(id);
+        return _BuildList.Remove(id);
     }
 }

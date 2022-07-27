@@ -47,13 +47,6 @@ public class BankAccount
         return ++TotalBankNumber;
     }
     /// <summary>
-    /// Вывод информации о банковском счёте
-    /// </summary>
-    public void PrintInfo()
-    {
-        Console.WriteLine($"Баланс банковского счёта #{_BankNumber} типа {_TypeAccount}: {_Balance};");
-    }
-    /// <summary>
     /// Снятие суммы с баланса банковского счёта
     /// </summary>
     /// <param name="amount">Сумма, которую необходимо снять</param>
@@ -89,6 +82,25 @@ public class BankAccount
             return true;
         }
         return false;
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(BankNumber, Balance, TypeAccount);
+    }
+    public override bool Equals(object? obj)
+    {
+        if (obj is not BankAccount other)
+            return false;
+
+        return BankNumber == other.BankNumber 
+            && Balance == other.Balance 
+            && TypeAccount == other.TypeAccount;
+    }
+    public static bool operator ==(BankAccount account1, BankAccount account2) => Equals(account1, account2);
+    public static bool operator !=(BankAccount account1, BankAccount account2) => !(account1 == account2);
+    public override string ToString()
+    {
+        return $"Баланс банковского счёта #{_BankNumber} типа {_TypeAccount}: {_Balance};";
     }
 
     public BankAccount()

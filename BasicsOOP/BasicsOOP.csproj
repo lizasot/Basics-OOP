@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Builds\Builds.csproj" />
+    <ProjectReference Include="..\Figures\Figures.csproj" />
     <ProjectReference Include="..\Numbers\Numbers.csproj" />
   </ItemGroup>
 
