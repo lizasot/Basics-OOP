@@ -1,4 +1,4 @@
-﻿using BasicsOOP;
+using BasicsOOP;
 using Numbers;
 
 static void TestComplexNumber()
