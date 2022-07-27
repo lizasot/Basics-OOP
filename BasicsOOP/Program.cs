@@ -1,25 +1,20 @@
 using BasicsOOP;
 using Figures;
 
-var p = new Point();
-Console.WriteLine(p);
-Console.WriteLine();
+static void Move(IMove2D obj)
+{
+    Console.WriteLine(obj.Move(5, 5));
+}
 
-p.Move(5, 4);
-Console.WriteLine(p);
+var figure = new Figure();
+Console.WriteLine(figure);
+Move(figure);
+Console.WriteLine(figure);
+
 Console.WriteLine();
 
 var circle = new Circle();
+
 Console.WriteLine(circle);
-Console.WriteLine("Area: " + circle.CalcArea());
-Console.WriteLine();
-
-var rec = new Rectangle();
-Console.WriteLine(rec);
-Console.WriteLine("Area: " + rec.CalcArea());
-Console.WriteLine();
-
-rec.SetColor(ConsoleColor.Red);
-rec.ChangeVisibility();
-rec.Move(-5, 8);
-Console.WriteLine(rec);
+Move(circle);
+Console.WriteLine(circle);
