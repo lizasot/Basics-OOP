@@ -1,4 +1,4 @@
-﻿using BasicsOOP;
+using BasicsOOP;
 using Figures;
 
 var p = new Point();

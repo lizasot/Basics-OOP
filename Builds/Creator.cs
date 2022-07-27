@@ -1,15 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Builds;
-public class Creator
+public static class Creator
 {
     private static int _TotalBuild;
     private static Dictionary<int, Build> _BuildList;
-    public static int TotalBuild { get; }
+    public static int TotalBuild
+    {
+        get { return _TotalBuild; }
+    }
     public static IReadOnlyDictionary<int, Build> BuildList => _BuildList ??= new Dictionary<int, Build>();
     private static int GenerateIDBuild()
     {
@@ -36,15 +39,8 @@ public class Creator
         _BuildList.Add(build.ID, build);
         return build;
     }
-
     public static bool RemoveBuild(int id)
     {
         return _BuildList.Remove(id);
-    }
-
-    private Creator()
-    {
-        _TotalBuild = 0;
-        _BuildList = new Dictionary<int, Build>();
     }
 }
