@@ -1,4 +1,6 @@
-﻿namespace Figures;
+﻿using System.Text;
+
+namespace Figures;
 public class Figure
 {
     private ConsoleColor _Color = ConsoleColor.White;
@@ -37,9 +39,11 @@ public class Figure
     }
     public override string ToString()
     {
-        return "Figure: " + GetName() +
-            "\nColor: " + _Color + 
-            "\nVisible: " + _Visible + 
-            "\n[X, Y]: [" + _X + ", " + _Y + "]";
+        return new StringBuilder()
+            .Append("Figure: ").AppendLine(GetName())
+            .Append("Color: ").AppendLine(_Color.ToString())
+            .Append("Visible: ").AppendLine(_Visible.ToString())
+            .AppendFormat($"[X, Y]: [{_X}, {_Y}]")
+            .ToString();
     }
 }
