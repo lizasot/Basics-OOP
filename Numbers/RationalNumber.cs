@@ -70,10 +70,18 @@ public readonly struct RationalNumber
         return (numb1 * numb2) / NOD(numb1, numb2);
     }
 
-    public static bool operator ==(RationalNumber numb1, RationalNumber numb2)
+    public override bool Equals(object? obj)
     {
-        return ((numb1._Numerator == numb2._Numerator) && (numb1._Denominator == numb2._Denominator));
+        if (obj is not RationalNumber)
+        {
+            return false;
+        }
+
+        RationalNumber other = (RationalNumber)obj;
+        return Numerator == other.Numerator
+            && Denominator == other.Denominator;
     }
+    public static bool operator ==(RationalNumber numb1, RationalNumber numb2) => Equals(numb1, numb2);
     public static bool operator !=(RationalNumber numb1, RationalNumber numb2) => !(numb1 == numb2);
     public static bool operator >(RationalNumber numb1, RationalNumber numb2)
     {
