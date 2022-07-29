@@ -1,4 +1,6 @@
 ﻿using FileManager;
 
-var consoleManager = new ConsoleManager();
-consoleManager.Run();
+var userInterface = new ConsoleInterface();
+
+var fileManagerLogic = new FileManagerLogic(userInterface);
+fileManagerLogic.Run();
