@@ -93,8 +93,13 @@ public class Window
 
         //запоминаем, куда нужно будет вернуть курсор
         (int leftCurrent, int topCurrent) = Console.GetCursorPosition();
-        Console.SetCursorPosition(_X + 1, _Y + 1);
-        Console.Write(message);
+        int i = 1;
+        foreach (var line in message.Split('\n'))
+        {
+            Console.SetCursorPosition(_X + 1, _Y + i);
+            Console.Write(line);
+            i++;
+        }
         if (returnCursor)
         {
             Console.SetCursorPosition(leftCurrent, topCurrent);

@@ -10,6 +10,6 @@ public interface IUserInterface
 {
     void Write(string text);
     void Output(string text);
-    string? ReadLine(string? prompt);
+    string ReadLine(string? prompt);
     void Close(string text);
 }

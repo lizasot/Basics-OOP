@@ -21,7 +21,7 @@ public class ConsoleInterface : IUserInterface
     {
         _MainWindow.Say(_ForegroundColor, text, true);
     }
-    public string? ReadLine(string? prompt)
+    public string ReadLine(string? prompt)
     {
         if (prompt is { Length: > 0 })
         {
@@ -30,7 +30,7 @@ public class ConsoleInterface : IUserInterface
         return ProcessEnterCommand(_Width - 2);
     }
 
-    private static string? ProcessEnterCommand(int width)
+    private static string ProcessEnterCommand(int width)
     {
         (int left, int top) = Console.GetCursorPosition();
         StringBuilder command = new StringBuilder();
