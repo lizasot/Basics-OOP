@@ -51,14 +51,14 @@ public class FileManagerLogic
         throw new Exception($"Неправильно указан путь {path}.");
     }
     /// <summary>
-    /// Находит путь среди полученного массива.
+    /// Собирает единый по смыслу аргумент в строку из полученного массива слов, разделённых пробелами.
     /// </summary>
     /// <param name="args">Массив строковых данных</param>
-    /// <param name="begin">Начальный элемент массива, с которого начинается путь</param>
-    /// <param name="end">Конечный элемент массива, на котором завершился поиск пути</param>
-    /// <returns>Возвращает строку полного пути без кавычек</returns>
-    /// <exception cref="Exception">Путь не удалось составить</exception>
-    public string GetPath(string[] args, int begin, out int end)
+    /// <param name="begin">Начальный элемент массива, с которого начинается аргумент</param>
+    /// <param name="end">Конечный элемент массива, на котором завершился поиск аргумента</param>
+    /// <returns>Возвращает строку полного аргумента без кавычек</returns>
+    /// <exception cref="Exception">Некорректный ввод данных.</exception>
+    public string GetArg(string[] args, int begin, out int end)
     {
         if (args[begin][0] != '"')
         {
@@ -84,7 +84,7 @@ public class FileManagerLogic
                 }
             }
         }
-        throw new Exception("Неправильно указан путь.");
+        throw new Exception("Некорректный ввод данных.");
     }
     public void Run()
     {
@@ -108,55 +108,55 @@ public class FileManagerLogic
                         _UserInterface.Output(PrintCommand());
                         break;
                     case "cd":
-                        ChangeDirectory(GetPath(args, 1, out end));
+                        ChangeDirectory(GetArg(args, 1, out end));
                         break;
                     case "new":
                         if (args.Length > 2)
                         {
-                            CurrentObj(GetPath(args, 1, out end)).Create(GetPath(args, end + 1, out end));
+                            CurrentObj(GetArg(args, 1, out end)).Create(GetArg(args, end + 1, out end));
                         }
                         else if (args.Length > 1)
                         {
-                            CurrentObj(GetPath(args, 1, out end)).Create(_CurrentDirectory.FullName);
+                            CurrentObj(GetArg(args, 1, out end)).Create(_CurrentDirectory.FullName);
                         }
                         else { throw new ArgumentException(); }
                         break;
                     case "cp":
                         if (args.Length > 2)
                         {
-                            CurrentObj(GetPath(args, 1, out end)).Copy(GetPath(args, end + 1, out end));
+                            CurrentObj(GetArg(args, 1, out end)).Copy(GetArg(args, end + 1, out end));
                         }
                         else if (args.Length > 1)
                         {
-                            CurrentObj(GetPath(args, 1, out end)).Copy(_CurrentDirectory.FullName);
+                            CurrentObj(GetArg(args, 1, out end)).Copy(_CurrentDirectory.FullName);
                         }
                         else { throw new ArgumentException(); }
                         break;
                     case "reloc":
                         if (args.Length > 2)
                         {
-                            CurrentObj(GetPath(args, 1, out end)).Relocate(GetPath(args, end + 1, out end));
+                            CurrentObj(GetArg(args, 1, out end)).Relocate(GetArg(args, end + 1, out end));
                         }
                         else if (args.Length > 1)
                         {
-                            CurrentObj(GetPath(args, 1, out end)).Relocate(_CurrentDirectory.FullName);
+                            CurrentObj(GetArg(args, 1, out end)).Relocate(_CurrentDirectory.FullName);
                         }
                         else { throw new ArgumentException(); }
                         break;
                     case "rm":
-                        CurrentObj(GetPath(args, 1, out end)).Delete();
+                        CurrentObj(GetArg(args, 1, out end)).Delete();
                         break;
                     case "name":
-                        CurrentObj(GetPath(args, 1, out end)).Rename(GetPath(args, end + 1, out end));
+                        CurrentObj(GetArg(args, 1, out end)).Rename(GetArg(args, end + 1, out end));
                         break;
                     case "info":
-                        CurrentObj(GetPath(args, 1, out end)).Info();
+                        CurrentObj(GetArg(args, 1, out end)).Info();
                         break;
                     case "stat":
-                        CurrentObj(GetPath(args, 1, out end)).PrintStatistics();
+                        CurrentObj(GetArg(args, 1, out end)).PrintStatistics();
                         break;
                     case "ls":
-                        var dir = CurrentObj(GetPath(args, 1, out end));
+                        var dir = CurrentObj(GetArg(args, 1, out end));
                         if (args.Length > end && int.TryParse(args[end + 1], out int page))
                         {
                             dir.DrawTree(page);

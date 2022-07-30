@@ -23,7 +23,7 @@ public class DirectoryCommandHandler : CommandHandler
     {
     }
 
-    public override void DrawTree()
+    public override void DrawTree(int page)
     {
     }
 
@@ -33,7 +33,7 @@ public class DirectoryCommandHandler : CommandHandler
 
     public override void PrintStatistics()
     {
-        throw new NotImplementedException();
+        throw new Exception("Указана директория, а необходим файл.");
     }
 
     public override void Relocate(string path)

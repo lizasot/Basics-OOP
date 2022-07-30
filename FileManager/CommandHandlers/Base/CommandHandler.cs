@@ -11,7 +11,7 @@ public abstract class CommandHandler : ICommands
     public abstract void Copy(string path);
     public abstract void Create(string path);
     public abstract void Delete();
-    public abstract void DrawTree();
+    public abstract void DrawTree(int page);
     public abstract void Info();
     public abstract void PrintStatistics();
     public abstract void Relocate(string path);
