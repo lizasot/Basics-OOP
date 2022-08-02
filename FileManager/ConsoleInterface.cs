@@ -26,16 +26,13 @@ public class ConsoleInterface : IUserInterface
     {
         _MainWindow.Say(_ForegroundColor, text, true);
     }
-    public string ReadLine(string? prompt)
+    public string ReadLine(string prompt)
     {
-        if (prompt is { Length: > 0 })
-        {
-            _InputWindow.Say(_ForegroundColor, prompt, false);
-        }
-        return ProcessEnterCommand(_Width - 2);
+        _InputWindow.Say(_ForegroundColor, prompt, false);
+        return ProcessEnterCommand(_Width - 2, prompt);
     }
 
-    private static string ProcessEnterCommand(int width)
+    private string ProcessEnterCommand(int width, string prompt)
     {
         (int left, int top) = Console.GetCursorPosition();
         StringBuilder command = new StringBuilder();
@@ -76,6 +73,7 @@ public class ConsoleInterface : IUserInterface
             if (keyInfo.Key == ConsoleKey.UpArrow)
             {
                 //вывести прошлую команду
+                _InputWindow.Say(_ForegroundColor, $"{prompt}{}", false);
             }
             else if (keyInfo.Key == ConsoleKey.DownArrow)
             {
