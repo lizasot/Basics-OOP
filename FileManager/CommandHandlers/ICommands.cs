@@ -8,7 +8,9 @@ namespace FileManager.CommandHandlers;
 
 public interface ICommands
 {
-    void Create(string path);
+    void Create(string path, string name);
+    void CreateFile(string name);
+    void CreateDir(string name);
     void Copy(string path);
     void Relocate(string path);
     void Delete();

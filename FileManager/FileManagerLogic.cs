@@ -15,15 +15,16 @@ public class FileManagerLogic
     {
         var commandList = new StringBuilder();
         commandList.AppendLine("Список команд:");
-        commandList.AppendLine("cd: Сменить текущую директорию");
-        commandList.AppendLine("new: Создать папку/файл в указанную директорию");
-        commandList.AppendLine("cp: Копирует папку/файл в указанную директорию");
-        commandList.AppendLine("reloc: Перемещает папку/файл в указанную директорию");
-        commandList.AppendLine("rm: Удаляет папку/файл");
-        commandList.AppendLine("name: Устанавливает имя у указонного файла/папки");
-        commandList.AppendLine("info: Выводит информацию о файле/папке");
-        commandList.AppendLine("stat: Выводит сведения о содержимом файла");
-        commandList.AppendLine("ls: Постраничный вывод содержимого папки");
+        commandList.AppendLine("cd <Путь_директории>: Сменить текущую директорию");
+        commandList.AppendLine("new dir <Путь_директории>* <Имя_новой_папки>: Создать папку в указанную директорию");
+        commandList.AppendLine("new file <Путь_директории>* <Имя_нового_файла>: Создать файл в указанную директорию");
+        commandList.AppendLine("cp <Путь_файла/папки> <Путь_конечного_файла/папки>*: Копирует папку/файл в указанную директорию");
+        commandList.AppendLine("reloc <Путь_файла/папки> <Путь_директории>*: Перемещает папку/файл в указанную директорию");
+        commandList.AppendLine("rm <Путь_файла/папки>: Удаляет папку/файл");
+        commandList.AppendLine("name <Новое_имя> <Путь_файла/папки>*: Устанавливает имя у указонного файла/папки");
+        commandList.AppendLine("info <Путь_файла/папки>*: Выводит информацию о файле/папке");
+        commandList.AppendLine("stat <Путь_файла>: Выводит сведения о содержимом файла");
+        commandList.AppendLine("ls <Путь_папки>* <Номер страницы>*: Постраничный вывод содержимого папки");
         commandList.AppendLine("quit: Выход из программы");
         return commandList.ToString();
     }
@@ -48,6 +49,10 @@ public class FileManagerLogic
         {
             return new FileCommandHandler(_UserInterface, new FileInfo(path));
         }
+        else if (Directory.Exists($"{_CurrentDirectory.FullName}{path}"))
+        {
+            return new DirectoryCommandHandler(_UserInterface, new DirectoryInfo($"{_CurrentDirectory.FullName}{path}"));
+        }
         throw new Exception($"Неправильно указан путь {path}.");
     }
     /// <summary>
@@ -63,9 +68,14 @@ public class FileManagerLogic
         if (args[begin][0] != '"')
         {
             end = begin;
-            return args[1];
+            return args[begin];
         }
-        else
+        else if (args[begin][args[begin].Length - 1] == '"')
+        {
+            end = begin;
+            return args[begin][1..(args[begin].Length - 1)];
+        }
+        else 
         {
             var path = new StringBuilder();
             path.Append(args[begin][1..]);
@@ -99,6 +109,8 @@ public class FileManagerLogic
             try
             {
                 int end = 0;
+                string arg;
+                ICommands currObj;
                 switch (commandName.ToLower())
                 {
                     case "quit":
@@ -113,24 +125,48 @@ public class FileManagerLogic
                     case "new":
                         if (args.Length > 2)
                         {
-                            CurrentObj(GetArg(args, 1, out end)).Create(GetArg(args, end + 1, out end));
-                        }
-                        else if (args.Length > 1)
-                        {
-                            CurrentObj(GetArg(args, 1, out end)).Create(_CurrentDirectory.FullName);
+                            if (args[1] == "file")
+                            {
+                                arg = GetArg(args, 2, out end);
+                                try
+                                {
+                                    currObj = CurrentObj(arg);
+                                    arg = GetArg(args, end + 1, out end);
+                                }
+                                catch (Exception)
+                                {
+                                    currObj = CurrentObj(_CurrentDirectory.FullName);
+                                }
+                                currObj.CreateFile(arg);
+                            }
+                            else if (args[1] == "dir")
+                            {
+                                arg = GetArg(args, 2, out end);
+                                try
+                                {
+                                    currObj = CurrentObj(arg);
+                                    arg = GetArg(args, end + 1, out end);
+                                }
+                                catch (Exception)
+                                {
+                                    currObj = CurrentObj(_CurrentDirectory.FullName);
+                                }
+                                currObj.CreateDir(arg);
+                            }
+                            else { throw new ArgumentException(); }
                         }
                         else { throw new ArgumentException(); }
                         break;
                     case "cp":
-                        if (args.Length > 2)
+                        arg = GetArg(args, 1, out end);
+                        if (end == args.Length - 1)
                         {
-                            CurrentObj(GetArg(args, 1, out end)).Copy(GetArg(args, end + 1, out end));
+                            CurrentObj(arg).Copy(_CurrentDirectory.FullName);
                         }
-                        else if (args.Length > 1)
+                        else
                         {
-                            CurrentObj(GetArg(args, 1, out end)).Copy(_CurrentDirectory.FullName);
+                            CurrentObj(arg).Copy(GetArg(args, end + 1, out end));
                         }
-                        else { throw new ArgumentException(); }
                         break;
                     case "reloc":
                         if (args.Length > 2)
@@ -147,23 +183,58 @@ public class FileManagerLogic
                         CurrentObj(GetArg(args, 1, out end)).Delete();
                         break;
                     case "name":
-                        CurrentObj(GetArg(args, 1, out end)).Rename(GetArg(args, end + 1, out end));
+                        if (args.Length > 2)
+                        {
+                            var name = GetArg(args, 1, out end);
+                            CurrentObj(GetArg(args, end + 1, out end)).Rename(name);
+                        }
+                        else { throw new ArgumentException(); }
                         break;
                     case "info":
-                        CurrentObj(GetArg(args, 1, out end)).Info();
+                        if (args.Length == 1)
+                        {
+                            CurrentObj(_CurrentDirectory.FullName).Info();
+                        }
+                        else
+                        {
+                            CurrentObj(GetArg(args, 1, out end)).Info();
+                        }
                         break;
                     case "stat":
                         CurrentObj(GetArg(args, 1, out end)).PrintStatistics();
                         break;
                     case "ls":
-                        var dir = CurrentObj(GetArg(args, 1, out end));
-                        if (args.Length > end && int.TryParse(args[end + 1], out int page))
+                        if (args.Length > 1)
                         {
-                            dir.DrawTree(page);
+                            int page;
+                            if (int.TryParse(args[1], out page))
+                            {
+                                CurrentObj(_CurrentDirectory.FullName).DrawTree(page);
+                            }
+                            else
+                            {
+                                currObj = CurrentObj(GetArg(args, 1, out end));
+                                if (args.Length > end + 1)
+                                {
+                                    arg = GetArg(args, end + 1, out end);
+                                    if (int.TryParse(arg, out page))
+                                    {
+                                        currObj.DrawTree(page);
+                                    }
+                                    else
+                                    {
+                                        throw new ArgumentException();
+                                    }
+                                }
+                                else
+                                {
+                                    currObj.DrawTree(1);
+                                }
+                            }
                         }
                         else
                         {
-                            dir.DrawTree(1);
+                            CurrentObj(_CurrentDirectory.FullName).DrawTree(1);
                         }
                         break;
                     default:
@@ -173,7 +244,6 @@ public class FileManagerLogic
             catch (Exception e)
             {
                 _UserInterface.Write(e.Message);
-                throw;
             }
         } while (canWork);
 

@@ -1,5 +1,6 @@
 ﻿namespace FileManager;
 
+using System.Configuration;
 using System.Text;
 
 public class ConsoleInterface : IUserInterface
@@ -13,6 +14,10 @@ public class ConsoleInterface : IUserInterface
     private int _Width = 120;
     private int _Height = 30;
 
+    public void Start()
+    {
+        ConfigurationManager.AppSettings.Set("PageLines", "17");
+    }
     public void Write(string text)
     {
         _InfoWindow.Say(_ForegroundColor, text, true);

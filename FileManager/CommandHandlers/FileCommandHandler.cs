@@ -14,17 +14,34 @@ public class FileCommandHandler : CommandHandler
 
     public override void Copy(string path)
     {
-        _File.CopyTo(path);
-    }
-
-    public override void Create(string path)
-    {
-        throw new Exception("Указан файл, а необходима директория.");
+        if (Directory.Exists(path))
+        {
+            if (path[path.Length - 1] != '\\')
+            {
+                File.Copy(_File.FullName, $"{path}\\{_File.Name}");
+            }
+            else
+            {
+                File.Copy(_File.FullName, $"{path}{_File.Name}");
+            }
+        }
+        else
+        {
+            File.Copy(_File.FullName, path);
+        }
     }
 
     public override void Delete()
     {
-        _File.Delete();
+        _UserInterface.Write($"Вы уверены, что хотите удалить следующий файл:\n{_File.FullName}?");
+        if (_UserInterface.ReadLine("Введите \"да\" для продолжения удаления объекта > ") == "да")
+        {
+            _File.Delete();
+        }
+        else
+        {
+            _UserInterface.Write("Удаление отменено.");
+        }
     }
 
     public override void DrawTree(int page)
@@ -59,13 +76,43 @@ public class FileCommandHandler : CommandHandler
 
     public override void Relocate(string path)
     {
-        _File.MoveTo(path);
+        if (Directory.Exists(path))
+        {
+            if (path[path.Length - 1] != '\\')
+            {
+                _File.MoveTo($"{path}\\{_File.Name}");
+            }
+            else
+            {
+                _File.MoveTo($"{path}{_File.Name}");
+            }
+        }
+        else
+        {
+            _File.MoveTo(path);
+        }
     }
 
     public override void Rename(string name)
-    {        
-        File.Move(_File.FullName, $"{Path.GetFullPath(_File.FullName)}{name}");
+    {
+        File.Move(_File.FullName, $"{Path.GetDirectoryName(_File.FullName)}\\{name}");
     }
+
+    public override void Create(string path, string name)
+    {
+        File.Create($"{path}{name}");
+    }
+
+    public override void CreateDir(string name)
+    {
+        throw new Exception("Указан файл, а необходима директория.");
+    }
+
+    public override void CreateFile(string name)
+    {
+        throw new Exception("Указан файл, а необходима директория.");
+    }
+
     public FileCommandHandler(IUserInterface userInterface, FileInfo file)
     {
         _UserInterface = userInterface;
