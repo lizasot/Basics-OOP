@@ -1,5 +1,6 @@
 ﻿namespace FileManager;
 
+using FileManager.CommandHandlers;
 using System.Configuration;
 using System.Text;
 
@@ -13,6 +14,8 @@ public class ConsoleInterface : IUserInterface
     private ConsoleColor _BorderColor;
     private int _Width = 120;
     private int _Height = 30;
+
+    private HistoryCommands _History;
 
     public void Start()
     {
@@ -38,6 +41,7 @@ public class ConsoleInterface : IUserInterface
         StringBuilder command = new StringBuilder();
         ConsoleKeyInfo keyInfo;
         char key;
+        _History.Reset();
 
         do
         {
@@ -45,7 +49,7 @@ public class ConsoleInterface : IUserInterface
             keyInfo = Console.ReadKey(true);
             key = keyInfo.KeyChar;
 
-            if (keyInfo.Key != ConsoleKey.Enter && key != '\0' && currentLeft < width)
+            if (keyInfo.Key != ConsoleKey.Enter && key != '\0' && key != '\b' && currentLeft < width)
             {
                 command.Append(key);
                 Console.Write(key);
@@ -73,21 +77,28 @@ public class ConsoleInterface : IUserInterface
             if (keyInfo.Key == ConsoleKey.UpArrow)
             {
                 //вывести прошлую команду
-                _InputWindow.Say(_ForegroundColor, $"{prompt}{}", false);
+                command.Clear();
+                command.Append(_History.GetPrev());
+                _InputWindow.Say(_ForegroundColor, $"{prompt}{command}", false);
             }
             else if (keyInfo.Key == ConsoleKey.DownArrow)
             {
                 //вывести последующую команду
+                command.Clear();
+                command.Append(_History.GetNext());
+                _InputWindow.Say(_ForegroundColor, $"{prompt}{command}", false);
             }
             else
             {
                 //currentCommand = 0;
+                _History.Reset();
             }
         }
         while (keyInfo.Key != ConsoleKey.Enter);
         if (command.Length > 0)
         {
             //добавить команду в историю команд
+            _History.Add(command.ToString());
         }
 
         return command.ToString();
@@ -102,6 +113,8 @@ public class ConsoleInterface : IUserInterface
 
     public ConsoleInterface()
     {
+        _History = new HistoryCommands();
+
         _ForegroundColor = ConsoleColor.White;
         _BackgroundColor = ConsoleColor.DarkGray;
         _BorderColor = ConsoleColor.Yellow;
@@ -122,10 +135,11 @@ public class ConsoleInterface : IUserInterface
 
         _MainWindow.Draw(_ForegroundColor);
         _InfoWindow.Draw(_ForegroundColor);
-        _InputWindow.Say(_ForegroundColor, "Ввод команды: ", false);
     }
     public ConsoleInterface(ConsoleColor foregroundColor, ConsoleColor backgroundColor, ConsoleColor borderColor)
     {
+        _History = new HistoryCommands();
+
         _ForegroundColor = foregroundColor;
         _BackgroundColor = backgroundColor;
         _BorderColor = borderColor;
@@ -146,6 +160,5 @@ public class ConsoleInterface : IUserInterface
 
         _MainWindow.Draw(_ForegroundColor);
         _InfoWindow.Draw(_ForegroundColor);
-        _InputWindow.Say(_ForegroundColor, "Ввод команды: ", false);
     }
 }

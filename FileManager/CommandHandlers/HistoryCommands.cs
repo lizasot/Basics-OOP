@@ -9,8 +9,13 @@ namespace FileManager.CommandHandlers;
 public class HistoryCommands
 {
     private StringBuilder CommandList;
+    private int CommandCount;
     private int IndexCurrentCommand;
 
+    public int GetIndex()
+    {
+        return IndexCurrentCommand;
+    }
     public string GetCurrentCommand()
     {
         string[] oldCommands = CommandList.ToString().Split('\n');
@@ -38,17 +43,20 @@ public class HistoryCommands
 
     public void Add(string command)
     {
-        CommandList.AppendLine(command);
+        CommandList.Append($"{command}\n");
+        //CommandList.Insert(0, $"{command}\n");
+        CommandCount++;
     }
 
     public void Reset()
     {
-        IndexCurrentCommand = 0;
+        IndexCurrentCommand = CommandCount;
     }
 
     public HistoryCommands()
     {
         CommandList = new StringBuilder();
+        CommandCount = 0;
         IndexCurrentCommand = 0;
     }
 }
