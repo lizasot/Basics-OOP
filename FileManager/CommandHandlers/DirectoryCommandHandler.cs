@@ -207,6 +207,148 @@ public class DirectoryCommandHandler : CommandHandler
         _UserInterface.Output(output.ToString());
     }
 
+    public override void SetAttributes(string attribute)
+    {
+        throw new Exception("Указана директория, а необходим файл.");
+    }
+
+    private bool CorrectName(string name, string mask)
+    {
+        bool correct = true;
+        int iName = 0;
+        int iUnknownSymb = -1;
+
+        for (int i = 0; i < mask.Length; i++)
+        {
+            if (iUnknownSymb == i)
+            {
+                if (iName >= name.Length)
+                {
+                    correct = false;
+                    break;
+                }
+
+                if (mask[i] == '?' && iName + 1 < name.Length)
+                {
+                    iUnknownSymb++;
+                    iName++;
+                    continue;
+                }
+
+                while (name[iName] != mask[i])
+                {
+                    iName++;
+                    if (iName >= name.Length)
+                    {
+                        correct = false;
+                        break;
+                    }
+                }
+            }
+
+            if (mask[i] != '?' && mask[i] != '*')
+            {
+                if (iName >= name.Length)
+                {
+                    correct = false;
+                    break;
+                }
+
+                if (mask[i] == name[iName])
+                {
+                    iName++;
+                    continue;
+                }
+                else
+                {
+                    correct = false;
+                    break;
+                }
+            }
+            else
+            {
+                if (mask[i] == '?')
+                {
+                    if (iName >= name.Length)
+                    {
+                        correct = false;
+                        break;
+                    }
+                    iName++;
+                    continue;
+                }
+                else //'*'
+                {
+                    iUnknownSymb = i + 1;
+                    continue;
+                }
+            }
+        }
+
+        return correct;
+    }
+
+    private void CheckAllFiles(StringBuilder foundObj, FileInfo[] subFiles, string mask)
+    {
+        for (int i = 0; i < subFiles.Length; i++)
+        {
+            if (CorrectName(subFiles[i].Name, mask))
+            {
+                foundObj.Append($"{subFiles[i].FullName}\n");
+            }
+        }
+    }
+
+    private void GetObjList(StringBuilder foundObj, DirectoryInfo dir, string mask)
+    {
+        if (CorrectName(dir.Name,mask))
+        {
+            foundObj.Append($"{dir.FullName}\n");
+        }
+        FileInfo[] subFiles = dir.GetFiles();
+        DirectoryInfo[] subDirs = dir.GetDirectories();
+        for (int i = 0; i < subDirs.Length; i++)
+        {
+            GetObjList(foundObj, subDirs[i], mask);
+        }
+        CheckAllFiles(foundObj, subFiles, mask);
+    }
+
+    public override void Search(string mask, int page)
+    {
+        StringBuilder foundObj = new StringBuilder();
+        GetObjList(foundObj, _Directory, mask);
+        if (!int.TryParse(ConfigurationManager.AppSettings.Get("PageLines"), out int pageLines))
+        {
+            pageLines = 16;
+        }
+        string[] lines = foundObj.ToString().Split('\n');
+        int totalPage = (lines.Length + pageLines - 1) / pageLines;
+        if (page > totalPage)
+        {
+            page = totalPage;
+        }
+        else if (page <= 0)
+        {
+            page = 1;
+        }
+        var output = new StringBuilder();
+        for (int i = (pageLines * (page - 1)), counter = 0; i < (pageLines * page); i++, counter++)
+        {
+            if (i < lines.Length - 1)
+            {
+                output.AppendLine(lines[i]);
+            }
+            else
+            {
+                output.Append("\n");
+            }
+        }
+        string infoPage = $"{page} из {totalPage}";
+        output.Append(infoPage);
+        _UserInterface.Output(output.ToString());
+    }
+
     public DirectoryCommandHandler(IUserInterface userInterface, DirectoryInfo directory)
     {
         _UserInterface = userInterface;

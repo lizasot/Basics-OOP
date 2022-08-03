@@ -24,7 +24,9 @@ public class FileManagerLogic
         commandList.AppendLine("name <Новое_имя> <Путь_файла/папки>*: Устанавливает имя у указонного файла/папки");
         commandList.AppendLine("info <Путь_файла/папки>*: Выводит информацию о файле/папке");
         commandList.AppendLine("stat <Путь_файла>: Выводит сведения о содержимом файла");
-        commandList.AppendLine("ls <Путь_папки>* <Номер страницы>*: Постраничный вывод содержимого папки");
+        commandList.AppendLine("att <Путь_файла> <Archive | Hidden | ReadOnly>: Изменить атрибуты файла");
+        commandList.AppendLine("ls <Путь_папки>* <Номер_страницы>*: Постраничный вывод содержимого папки");
+        commandList.AppendLine("search <Путь_папки>* <Название> <Номер_страницы>*: Поиск файлов и папок по маске (с использованием символов \"?\" и \"*\")");
         commandList.AppendLine("quit: Выход из программы");
         return commandList.ToString();
     }
@@ -206,6 +208,9 @@ public class FileManagerLogic
                     case "stat":
                         CurrentObj(GetArg(args, 1, out end)).PrintStatistics();
                         break;
+                    case "att":
+                        CurrentObj(GetArg(args, 1, out end)).SetAttributes(GetArg(args, end +1, out end));
+                        break;
                     case "ls":
                         if (args.Length > 1)
                         {
@@ -238,6 +243,36 @@ public class FileManagerLogic
                         else
                         {
                             CurrentObj(_CurrentDirectory.FullName).DrawTree(1);
+                        }
+                        break;
+                    case "test":
+                        CurrentObj(_CurrentDirectory.FullName).Search("???",1);
+                        break;
+                    case "search":
+                        arg = GetArg(args, 1, out end);
+                        try
+                        {
+                            currObj = CurrentObj(arg);
+                        }
+                        catch (Exception)
+                        {
+                            currObj = CurrentObj(_CurrentDirectory.FullName);
+                            end = 0;
+                        }
+                        arg = GetArg(args, end + 1, out end);
+                        if (args.Length - 1 == end)
+                        {
+                            currObj.Search(arg, 1);
+                        }
+                        else
+                        {
+                            arg = GetArg(args, end + 1, out end);
+                            if (int.TryParse(arg, out int page))
+                            {
+                                currObj.Search(arg, page);
+                            }
+                            else
+                                throw new ArgumentException(arg);
                         }
                         break;
                     default:

@@ -113,6 +113,58 @@ public class FileCommandHandler : CommandHandler
         throw new Exception("Указан файл, а необходима директория.");
     }
 
+    public override void SetAttributes(string attribute)
+    {
+        //Archive | Hidden | ReadOnly
+        FileAttributes attributes = File.GetAttributes(_File.FullName);
+        switch (attribute.ToLower())
+        {
+            case "archive":
+                if ((attributes & FileAttributes.Archive) == FileAttributes.Archive)
+                {
+                    //убирает Archive
+                    File.SetAttributes(_File.FullName, attributes & ~FileAttributes.Archive);
+                }
+                else
+                {
+                    //устанавливает Archive
+                    File.SetAttributes(_File.FullName, attributes | FileAttributes.Archive);
+                }
+                break;
+            case "hidden":
+                if ((attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                {
+                    //убирает Hidden
+                    File.SetAttributes(_File.FullName, attributes & ~FileAttributes.Hidden);
+                }
+                else
+                {
+                    //устанавливает Hidden
+                    File.SetAttributes(_File.FullName, attributes | FileAttributes.Hidden);
+                }
+                break;
+            case "readonly":
+                if ((attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                {
+                    //убирает Hidden
+                    File.SetAttributes(_File.FullName, attributes & ~FileAttributes.ReadOnly);
+                }
+                else
+                {
+                    //устанавливает Hidden
+                    File.SetAttributes(_File.FullName, attributes | FileAttributes.ReadOnly);
+                }
+                break;
+            default:
+                throw new Exception("Неизвестное имя атрибута");
+        }
+    }
+
+    public override void Search(string mask, int page)
+    {
+        throw new Exception("Указан файл, а необходима директория.");
+    }
+
     public FileCommandHandler(IUserInterface userInterface, FileInfo file)
     {
         _UserInterface = userInterface;

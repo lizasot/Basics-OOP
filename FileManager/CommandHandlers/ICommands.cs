@@ -16,6 +16,8 @@ public interface ICommands
     void Delete();
     void Rename(string name);
     void Info();
-    public void PrintStatistics();
-    public void DrawTree(int page);
+    void SetAttributes(string attribute);
+    void PrintStatistics();
+    void DrawTree(int page);
+    void Search(string mask,int page);
 }

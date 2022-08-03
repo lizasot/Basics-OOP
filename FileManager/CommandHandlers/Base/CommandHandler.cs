@@ -18,4 +18,6 @@ public abstract class CommandHandler : ICommands
     public abstract void PrintStatistics();
     public abstract void Relocate(string path);
     public abstract void Rename(string name);
+    public abstract void Search(string mask, int page);
+    public abstract void SetAttributes(string attribute);
 }
