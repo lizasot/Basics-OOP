@@ -259,12 +259,16 @@ public class FileManagerLogic
                         arg = GetArg(args, end + 1, out end);
                         if (args.Length - 1 == end)
                         {
-                            currObj.Search(arg, 1);
+                            if (int.TryParse(arg, out int page))
+                            {
+                                currObj.Search(arg, page);
+                            }
+                            else
+                                currObj.Search(arg, 1);
                         }
                         else
                         {
-                            arg = GetArg(args, end + 1, out end);
-                            if (int.TryParse(arg, out int page))
+                            if (int.TryParse(GetArg(args, end + 1, out end), out int page))
                             {
                                 currObj.Search(arg, page);
                             }
