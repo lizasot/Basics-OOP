@@ -122,6 +122,9 @@ public class FileManagerLogic
                     case "cd":
                         ChangeDirectory(GetArg(args, 1, out end));
                         break;
+                    case "cd..":
+                        ChangeDirectory(Path.GetDirectoryName(_CurrentDirectory.FullName));
+                        break;
                     case "new":
                         if (args.Length > 2)
                         {
