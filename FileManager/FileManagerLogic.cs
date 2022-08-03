@@ -102,6 +102,7 @@ public class FileManagerLogic
     {
         _UserInterface.Write("Файловый менеджер");
         var canWork = true;
+        _UserInterface.Output(PrintCommand());
         do
         {
             var input = _UserInterface.ReadLine($"{_CurrentDirectory.FullName}>");
