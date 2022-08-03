@@ -245,9 +245,6 @@ public class FileManagerLogic
                             CurrentObj(_CurrentDirectory.FullName).DrawTree(1);
                         }
                         break;
-                    case "test":
-                        CurrentObj(_CurrentDirectory.FullName).Search("???",1);
-                        break;
                     case "search":
                         arg = GetArg(args, 1, out end);
                         try

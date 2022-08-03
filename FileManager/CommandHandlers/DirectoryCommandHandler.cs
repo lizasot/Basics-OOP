@@ -234,16 +234,54 @@ public class DirectoryCommandHandler : CommandHandler
                     iName++;
                     continue;
                 }
-
-                while (name[iName] != mask[i])
+                int iUnknownSymbLast = iUnknownSymb;
+                do
                 {
-                    iName++;
-                    if (iName >= name.Length)
+                    iUnknownSymbLast++;
+                } while (iUnknownSymbLast < mask.Length && mask[iUnknownSymbLast] != '?' && mask[iUnknownSymbLast] != '*');
+                iUnknownSymbLast--;
+
+                var countInd = iUnknownSymbLast - iUnknownSymb;
+                if (iUnknownSymbLast == mask.Length - 1)
+                {
+                    iName = (name.Length - 1) - countInd;
+                    if (iName < 0)
                     {
                         correct = false;
                         break;
                     }
                 }
+                if (countInd + iName < name.Length && countInd != 0)
+                {
+                    while (name[iName..(countInd + iName)] != mask[iUnknownSymb..iUnknownSymbLast])
+                    {
+                        iName++;
+                        if (countInd + iName >= name.Length)
+                        {
+                            correct = false;
+                            break;
+                        }
+                    }
+                }
+                else if (countInd == 0 && iName < name.Length)
+                {
+                    while (name[iName] != mask[iUnknownSymbLast])
+                    {
+                        iName++;
+                        if (iName >= name.Length)
+                        {
+                            correct = false;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    correct = false;
+                    break;
+                }
+                iName++;
+                continue;
             }
 
             if (mask[i] != '?' && mask[i] != '*')
@@ -279,10 +317,22 @@ public class DirectoryCommandHandler : CommandHandler
                 }
                 else //'*'
                 {
-                    iUnknownSymb = i + 1;
-                    continue;
+                    if (i + 1 != mask.Length)
+                    {
+                        iUnknownSymb = i + 1;
+                        continue;
+                    }
+                    else
+                    {
+                        iName = name.Length;
+                        break;
+                    }
                 }
             }
+        }
+        if (iName != name.Length)
+        {
+            correct = false;
         }
 
         return correct;
@@ -301,7 +351,7 @@ public class DirectoryCommandHandler : CommandHandler
 
     private void GetObjList(StringBuilder foundObj, DirectoryInfo dir, string mask)
     {
-        if (CorrectName(dir.Name,mask))
+        if (CorrectName(dir.Name, mask))
         {
             foundObj.Append($"{dir.FullName}\n");
         }
